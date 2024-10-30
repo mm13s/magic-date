@@ -1,0 +1,76 @@
+#restaurant selector
+# Function to get dietary restrictions from the user
+def get_dietary_restrictions():
+    vegetarian = input("Is anyone a vegetarian? (yes/no) ").lower()
+    vegan = input("Is anyone a vegan? (yes/no) ").lower()
+    gluten_free = input("Is anyone gluten-free? (yes/no) ").lower()
+    
+    if vegetarian not in ['yes', 'no'] or vegan not in ['yes', 'no'] or gluten_free not in ['yes', 'no']:
+        print("Invalid input. Please enter 'yes' or 'no.")
+        return None
+    return vegetarian, vegan, gluten_free
+
+# Function to filter restaurants based on dietary restrictions using normal variable calls
+def filter_restaurants(vegetarian, vegan, gluten_free):
+    restaurant_choices = []
+    if vegetarian == 'no' and vegan == 'no' and gluten_free == 'no':
+        restaurant_choices = ["Joe's Gourmet Burgers"]
+    if vegetarian == 'yes':
+        restaurant_choices.extend(["Main Street Pizza Company", "Corner Café", "Mama's Fine Italian", "The Chef's Kitchen"])
+    if vegan == 'yes':
+        restaurant_choices.extend(["Corner Café", "The Chef's Kitchen"])
+    if gluten_free == 'yes':
+        restaurant_choices.extend(["Main Street Pizza Company", "Corner Café", "The Chef's Kitchen"])
+    return restaurant_choices
+
+# Function to filter restaurants based on dietary restrictions using a dictionary
+def filter_restaurants_with_dict(vegetarian, vegan, gluten_free):
+    restaurants = {
+        "Joe's Gourmet Burgers": {"vegetarian": "no", "vegan": "no", "gluten_free": "no"},
+        "Main Street Pizza Company": {"vegetarian": "yes", "vegan": "no", "gluten_free": "yes"},
+        "Corner Café": {"vegetarian": "yes", "vegan": "yes", "gluten_free": "yes"},
+        "Mama's Fine Italian": {"vegetarian": "yes", "vegan": "no", "gluten_free": "no"},
+        "The Chef's Kitchen": {"vegetarian": "yes", "vegan": "yes", "gluten_free": "yes"}
+    }
+    restaurant_choices = [restaurant for restaurant in restaurants if
+                         (vegetarian == 'no' or restaurants[restaurant]["vegetarian"] == 'yes') and
+                         (vegan == 'no' or restaurants[restaurant]["vegan"] == 'yes') and
+                         (gluten_free == 'no' or restaurants[restaurant]["gluten_free"] == 'yes')]
+    return restaurant_choices
+
+# Function to filter restaurants based on dietary restrictions using a two-dimensional array
+def filter_restaurants_with_array(vegetarian, vegan, gluten_free):
+    restaurants = [
+        ["Joe's Gourmet Burgers", "no", "no", "no"],["Main Street Pizza Company", "yes", "no", "yes"],
+        ["Corner Café", "yes", "yes", "yes"],
+        ["Mama's Fine Italian", "yes", "no", "no"],
+        ["The Chef's Kitchen", "yes", "yes", "yes"]
+    ]
+    restaurant_choices = []
+    for restaurant in restaurants:
+        if (vegetarian == 'no' or restaurant[1] == 'yes') and \
+           (vegan == 'no' or restaurant[2] == 'yes') and \
+           (gluten_free == 'no' or restaurant[3] == 'yes'):
+            restaurant_choices.append(restaurant[0])
+    return restaurant_choices
+
+# Function to display restaurant choices
+def display_restaurant_choices(restaurant_choices):
+    if not restaurant_choices:
+        print('there are no suitable restaurants for your party's dietary restrictions.")
+    else:
+        print('Here are your restaurant choices:')
+        for restaurant in restaurant_choices:
+            print(restaurant)
+
+# Main function
+def main():
+    dietary_restrictions = get_dietary_restrictions()
+        if dietary_restrictions is not None:
+        restaurant_choices_normal = filter_restaurants(*dietary_restrictions)
+        restaurant_choices_dict = filter_restaurants_with_dict(*dietary_restrictions)
+        restaurant_choices_array = filter_restaurants_with_array(*dietary_restrictions)
+        combined_choices = restaurant_choices_normal + restaurant_choices_dict + restaurant_choices_array
+        display_restaurant_choices(set(combined_choices)) 
+if __name__ == '__main__':
+    main()
